@@ -49,9 +49,10 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not ebook:
         return await safe_edit(query, "🚫 Ebook tidak ditemukan.")
 
+    user = query.from_user
     await safe_edit(query, f"⏳ Membuat pembayaran via *{method.upper()}*...")
 
-    # Tentukan metode pembayaran yang diaktifkan
+    # Metode pembayaran
     payment_map = {
         "qris": ["other_qris"],
         "va": ["bank_transfer"],
@@ -59,11 +60,13 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
     enabled_payments = payment_map.get(method, ["other_qris"])
 
-    # Buat Snap Payment (bukan qris langsung!)
-    user = query.from_user
+    # Persiapan Midtrans Snap
     order_id = midtrans_client.generate_order_id("EBOOK")
     gross_amount = ebook["harga"]
     customer = midtrans_client.get_customer_from_user(user)
+
+    logger.info(f"📨 User {user.id} memilih metode: {method.upper()} | Ebook: {ebook['judul']}")
+    logger.info(f"📝 Membuat order ebook: {order_id} nominal {gross_amount}, metode: {method}")
 
     try:
         snap_response = await midtrans_client.create_snap_payment(
@@ -72,11 +75,12 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
             customer=customer,
             enabled_payments=enabled_payments
         )
+        logger.info(f"✅ Snap payment berhasil: {order_id}")
     except Exception as e:
-        logger.exception(f"❌ Gagal membuat pembayaran: {e}")
+        logger.exception(f"❌ Gagal membuat Snap: {e}")
         return await safe_edit(query, "❌ Gagal membuat pembayaran. Silakan coba lagi nanti.")
 
-    # Simpan transaksi ke Supabase
+    # Simpan transaksi
     trx_data = {
         "order_id": order_id,
         "user_id": user.id,
@@ -92,25 +96,30 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     loop = get_running_loop()
     success = await loop.run_in_executor(None, save_transaction, trx_data)
-    if not success:
+
+    if success:
+        logger.info(f"✅ Transaksi berhasil disimpan: data={trx_data}")
+        logger.info(f"📦 Transaksi disimpan ke Supabase: {order_id}")
+    else:
+        logger.error(f"❌ Gagal simpan transaksi: {order_id}")
         return await safe_edit(query, "❌ Gagal menyimpan transaksi.")
 
     payment_url = snap_response.get("redirect_url", "https://app.midtrans.com/")
-    logger.info(f"📦 Transaksi berhasil disiapkan untuk user {user.id} | metode: {method.upper()} | order_id: {order_id}")
     logger.info(f"🔗 Link pembayaran Midtrans: {payment_url}")
 
+    # Format invoice
     text = (
-        f"🧾 *Pembayaran Ebook*\n\n"
-        f"Judul: *{ebook['judul']}*\n"
-        f"Harga: Rp {gross_amount:,}".replace(",", ".") + "\n\n"
-        f"Metode: `{method.upper()}`\n"
-        f"Silakan tekan tombol di bawah untuk membayar:"
+        f"🧾 *INVOICE PEMBAYARAN EBOOK*\n\n"
+        f"📚 *{ebook['judul']}*\n"
+        f"💵 Harga: Rp {gross_amount:,.0f}\n"
+        f"💳 Metode: `{method.upper()}`\n\n"
+        f"🔗 Tekan tombol di bawah untuk menyelesaikan pembayaran:"
     )
 
     buttons = [
         [InlineKeyboardButton("💳 Bayar Sekarang", url=payment_url)],
-        [InlineKeyboardButton("⬅️ Kembali", callback_data=f"ebook_detail_{data_key}")]
+        [InlineKeyboardButton("❌ Batal / Kembali", callback_data=f"ebook_detail_{data_key}")]
     ]
-    await safe_edit(query, text, InlineKeyboardMarkup(buttons))
 
+    await safe_edit(query, text, InlineKeyboardMarkup(buttons))
 
