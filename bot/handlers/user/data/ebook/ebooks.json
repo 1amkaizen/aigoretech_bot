@@ -1,0 +1,82 @@
+{
+  "machine_learning_scikit": {
+    "judul": "Belajar Machine Learning dengan Python dan Liblary Scikit Learn",
+    "deskripsi": "Belajar Machine Learning dengan Python dan Library Scikit-Learn adalah panduan komprehensif yang dirancang untuk membantu pembaca memahami dasar-dasar dan aplikasi praktis machine learning menggunakan bahasa pemrograman Python dan library Scikit-Learn yang populer. Buku ini ditulis untuk pemula yang baru mengenal machine learning maupun praktisi yang ingin memperdalam pengetahuan mereka tentang teknik-teknik terbaru dalam bidang ini.",
+    "harga": 85000,
+    "file_id_key": "Belajar_Machine_Learning_dengan_Python_dan_Liblary_Scikit_Learn",
+    "faq": [
+      {
+        "q": "Siapa yang cocok membaca buku ini?",
+        "a": "Ebook ini cocok untuk pemula yang baru memulai belajar machine learning, serta profesional yang ingin memperdalam pengetahuan mereka tentang machine learning dengan Python dan Scikit-learn."
+      },
+      {
+        "q": "Apa yang akan saya pelajari dari ebook ini?",
+        "a": "Anda akan mempelajari dasar-dasar machine learning, teknik klasifikasi, regresi, clustering, evaluasi model, dan cara mengimplementasikan algoritma menggunakan Python dan Scikit-learn."
+      },
+      {
+        "q": "Apakah ada pembaruan konten di masa mendatang?",
+        "a": "Ya, pembaruan konten akan tersedia secara berkala untuk mengikuti perkembangan terbaru dalam bidang machine learning."
+      },
+      {
+        "q": "Bagaimana cara mendapatkan ebook ini?",
+        "a": "Anda dapat membeli ebook ini melalui platform ini, dan setelah pembayaran, Anda akan menerima link untuk mengunduh ebook."
+      }
+    ]
+  },
+  "fundamental_ml": {
+    "judul": "Fundamental Machine Learning: Panduan Lengkap untuk Pemula",
+    "deskripsi": "Ebook ini adalah panduan lengkap untuk pemula dalam memahami konsep-konsep dasar dan aplikasi machine learning. Buku ini tidak hanya memberikan pengantar yang jelas tentang berbagai algoritma dan teknik, tetapi juga menyoroti aplikasi praktis machine learning dalam berbagai industri seperti kesehatan, keuangan, e-commerce, dan teknologi. Pembaca akan belajar cara memilih model yang tepat, mengevaluasi performanya, dan menerapkan solusi machine learning tanpa harus fokus pada kode.",
+    "harga": 45000,
+    "file_id_key": "Fundamental_Machine_Leaning_Panduan_Lengkap_untuk_Pemula",
+    "faq": []
+  },
+  "platform_bot_django": {
+    "judul": "Membangun Platform Pembuatan Bot dengan Django",
+    "deskripsi": "Ebook ini adalah panduan lengkap untuk membangun platform pembuatan bot dengan Django. Ideal untuk pemula dan pengembang berpengalaman, ebook ini memandu Anda membuat platform untuk bot Telegram dan WhatsApp hanya dengan memasukkan token. Pelajari cara: Membangun platform intuitif, Mengintegrasikan webhook, Mengelola command, Menerapkan log aktivitas. Dilengkapi contoh kode dan akses ke repositori GitHub, ebook ini siap membantu Anda menciptakan platform bot yang Anda butuhkan.",
+    "harga": 200000,
+    "file_id_key": "Membangun_Platform_Pembuatan_Bot_dengan_Django",
+    "faq": [
+      {
+        "q": "Siapa yang seharusnya membaca buku ini?",
+        "a": "Buku ini ditujukan untuk pengembang pemula yang ingin memulai karir di dunia pengembangan bot, serta pengembang berpengalaman yang ingin memperdalam keahlian mereka dalam Django dan integrasi bot."
+      },
+      {
+        "q": "Apa yang akan saya pelajari dari buku ini?",
+        "a": "Pembaca akan mempelajari cara membuat bot interaktif, mengintegrasikan webhook, mengelola command, menerapkan log aktivitas, serta cara melakukan hosting dan menerapkan keamanan dalam proyek Django."
+      },
+      {
+        "q": "Apakah buku ini dilengkapi dengan contoh kode?",
+        "a": "Ya, setiap bab dilengkapi dengan contoh kode terperinci dan penjelasan teknis untuk memudahkan pemahaman dan penerapan."
+      },
+      {
+        "q": "Apakah buku ini untuk platform tertentu?",
+        "a": "Buku ini berfokus pada integrasi dengan Telegram dan WhatsApp, tetapi konsep yang diajarkan dapat diterapkan pada platform bot lainnya."
+      }
+    ]
+  },
+  "building_bot_platform": {
+    "judul": "Building a Bot Platform with Django",
+    "deskripsi": "This ebook is a comprehensive guide to building a bot creation platform using Django. Ideal for beginners and experienced developers, this ebook guides you in creating a platform for Telegram and WhatsApp bots simply by entering a token. Learn how to: Build an intuitive platform, Integrate webhooks, Manage commands, Implement activity logs. Equipped with practical code examples and access to a GitHub repository, this ebook is ready to help you create the bot platform you need.",
+    "harga": 350000,
+    "file_id_key": "Building_a_Bot_Platform_with_Django",
+    "faq": [
+      {
+        "q": "Who is this book for?",
+        "a": "This book is intended for beginner developers who want to start a career in bot development, as well as experienced developers who want to deepen their expertise in Django and bot integration."
+      },
+      {
+        "q": "What will I learn from this book?",
+        "a": "You will learn how to build interactive bots, integrate webhooks, manage commands, implement activity logging, and apply security in your Django projects."
+      },
+      {
+        "q": "Does this book include code examples?",
+        "a": "Yes, every chapter includes detailed code examples and technical explanations to facilitate understanding and application."
+      },
+      {
+        "q": "Is this book for a specific platform?",
+        "a": "While it focuses on Telegram and WhatsApp integrations, the concepts can be applied to other bot platforms as well."
+      }
+    ]
+  }
+}
+

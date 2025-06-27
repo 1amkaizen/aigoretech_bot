@@ -1,0 +1,2 @@
+git+https://github.com/1amkaizenn/telecore.git@main#egg=telecore
+git+ssh://git@github.com/1amkaizen/telecore.git@main#egg=telecore
