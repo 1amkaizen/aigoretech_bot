@@ -3,7 +3,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 from datetime import datetime
 from asyncio import get_running_loop
-
+from postgrest import APIError
 from telecore.logging.logger import get_logger
 from telecore.midtrans.client import MidtransClient
 from telecore.supabase.save_transaction import save_transaction
@@ -69,7 +69,7 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info(f"📝 Membuat order ebook: {order_id} nominal {gross_amount}, metode: {method}")
 
     try:
-        snap_response = await midtrans_client.create_snap_payment(
+        snap_data = await midtrans_client.create_snap_payment(
             order_id=order_id,
             amount=gross_amount,
             customer=customer,
@@ -80,7 +80,9 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.exception(f"❌ Gagal membuat Snap: {e}")
         return await safe_edit(query, "❌ Gagal membuat pembayaran. Silakan coba lagi nanti.")
 
-    # Simpan transaksi
+    _midtrans = snap_data.get("midtrans_response", {})
+    payment_url = snap_data.get("redirect_url", "https://app.midtrans.com/")
+
     trx_data = {
         "order_id": order_id,
         "user_id": user.id,
@@ -88,14 +90,22 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "full_name": user.full_name,
         "ebook_key": data_key,
         "ebook_title": ebook["judul"],
-        "gross_amount": gross_amount,
-        "transaction_status": "pending",
-        "payment_type": method,
+        "gross_amount": _midtrans.get("gross_amount", gross_amount),
+        "transaction_status": _midtrans.get("transaction_status", "pending"),
+        "payment_type": _midtrans.get("payment_type", method),
+        "transaction_id": _midtrans.get("transaction_id"),
+        "currency": _midtrans.get("currency"),
+        "transaction_time": _midtrans.get("transaction_time") or datetime.utcnow().isoformat(),
+        "status_message": _midtrans.get("status_message"),
+        "fraud_status": _midtrans.get("fraud_status"),
+        "signature_key": _midtrans.get("signature_key"),
+        "merchant_id": _midtrans.get("merchant_id"),
         "created_at": datetime.utcnow().isoformat(),
     }
 
     loop = get_running_loop()
     success = await loop.run_in_executor(None, save_transaction, trx_data)
+
 
     if success:
         logger.info(f"✅ Transaksi berhasil disimpan: data={trx_data}")
@@ -103,9 +113,6 @@ async def ebook_bayar(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         logger.error(f"❌ Gagal simpan transaksi: {order_id}")
         return await safe_edit(query, "❌ Gagal menyimpan transaksi.")
-
-    payment_url = snap_response.get("redirect_url", "https://app.midtrans.com/")
-    logger.info(f"🔗 Link pembayaran Midtrans: {payment_url}")
 
     # Format invoice
     text = (

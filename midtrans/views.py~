@@ -1,0 +1,53 @@
+# midtrans/views.py
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from telecore.midtrans.webhook import handle_midtrans_webhook
+from telecore.supabase.client import SupabaseClient
+from .handlers import prefix_handler_map
+import asyncio
+from django.http import HttpResponse, HttpResponseForbidden, FileResponse
+from supabase import create_client
+from telecore.config import SUPABASE_URL, SUPABASE_KEY
+import os
+
+supabase = SupabaseClient().client
+
+@csrf_exempt
+def midtrans_webhook_view(request):
+    result = asyncio.run(handle_midtrans_webhook(
+        request=request,
+        supabase_client=supabase,
+        transactions_table="Transactions",
+        prefix_handler_map=prefix_handler_map
+    ))
+    return JsonResponse(result)
+
+
+
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+from bot.handlers.user.ebook_file_map import EBOOK_FILE_MAP
+
+def download_ebook(request, token):
+    full_url = request.build_absolute_uri()
+    res = supabase.table("DownloadLinks").select("*").eq("download_url", full_url).execute()
+    record = res.data[0] if res.data else None
+
+    if not record or record.get("used"):
+        return HttpResponseForbidden("❌ Link tidak valid atau sudah digunakan.")
+
+    # Mark as used
+    supabase.table("DownloadLinks").update({"used": True, "used_at": "now()"}).eq("id", record["id"]).execute()
+
+    # Ambil filename
+    ebook_key = record["ebook_key"]
+    filename = EBOOK_FILE_MAP.get(ebook_key)
+    if not filename:
+        return HttpResponse("❌ Ebook tidak ditemukan.", status=404)
+
+    file_path = f"/home/pi/aigoretech_bot/media/ebook/{filename}"
+    if not os.path.exists(file_path):
+        return HttpResponse("❌ File tidak tersedia.", status=404)
+
+    return FileResponse(open(file_path, "rb"), as_attachment=True, filename=filename)
+

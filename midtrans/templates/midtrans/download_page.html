@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Ebook</title>
+</head>
+<body>
+    <h2>✅ Ebook kamu sudah siap</h2>
+    <p>Klik tombol di bawah untuk mengunduh:</p>
+
+    <form method="GET" action="{% url 'download_ebook' token=token %}">
+        <button type="submit">📥 Download Sekarang</button>
+    </form>
+
+    <p><small>*Catatan: Link hanya berlaku satu kali.</small></p>
+</body>
+</html>
+
