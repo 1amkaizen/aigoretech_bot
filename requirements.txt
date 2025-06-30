@@ -78,7 +78,7 @@ storage3==0.11.3
 StrEnum==0.4.15
 supabase==2.15.3
 supafunc==0.9.4
--e git+ssh://git@github.com/1amkaizen/telecore.git@87e82809c3105169b39db670b996af3fc3402d4b#egg=telecore
+git+https://git@github.com/1amkaizen/telecore.git@main
 tomlkit==0.13.3
 tqdm==4.67.1
 twine==3.8.0
