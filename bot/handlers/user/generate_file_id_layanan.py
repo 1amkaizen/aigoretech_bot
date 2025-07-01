@@ -12,8 +12,8 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_ID = os.getenv("ADMIN_ID")  # pastikan string, karena chat_id bisa berupa -100...
 
 BASE_DIR = os.path.dirname(__file__)
-IMG_DIR = os.path.join(BASE_DIR, "handlers/user/data/layanan/images")
-OUTPUT_JSON = os.path.join(BASE_DIR, "handlers/user/data/layanan/file_ids.json")
+IMG_DIR = os.path.join(BASE_DIR, "data/layanan/images")
+OUTPUT_JSON = os.path.join(BASE_DIR, "data/layanan/file_ids.json")
 
 def sanitize_filename(name: str) -> str:
     import re

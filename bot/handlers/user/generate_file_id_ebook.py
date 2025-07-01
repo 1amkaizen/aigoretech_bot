@@ -13,8 +13,8 @@ if not BOT_TOKEN or not CHAT_ID:
     raise EnvironmentError("❌ BOT_TOKEN dan ADMIN_ID harus diset di environment variable")
 
 BASE_DIR = os.path.dirname(__file__)
-IMG_DIR = os.path.join(BASE_DIR, "handlers/user/data/ebook/images")
-OUTPUT_JSON = os.path.join(BASE_DIR, "handlers/user/data/ebook/file_ids.json")
+IMG_DIR = os.path.join(BASE_DIR, "data/ebook/images")
+OUTPUT_JSON = os.path.join(BASE_DIR, "data/ebook/file_ids.json")
 
 def sanitize_filename(name: str) -> str:
     import re
