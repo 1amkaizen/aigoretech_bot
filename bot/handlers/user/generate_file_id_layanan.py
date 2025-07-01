@@ -2,9 +2,14 @@ import os
 import json
 from telegram import InputFile
 from telegram.ext import Application
+from dotenv import load_dotenv  # pastikan python-dotenv sudah di-install
 
-BOT_TOKEN = "5898177748:AAG8uulX8t4k50XbRPgTKKxYvvyEIH9gPeI"
-CHAT_ID = "2116777065"  # Contoh: -1001234567890
+# Load file .env
+load_dotenv()
+
+# Ambil dari environment
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_ID = os.getenv("ADMIN_ID")  # pastikan string, karena chat_id bisa berupa -100...
 
 BASE_DIR = os.path.dirname(__file__)
 IMG_DIR = os.path.join(BASE_DIR, "handlers/user/data/layanan/images")
@@ -22,11 +27,10 @@ async def upload_all(app):
         filepath = os.path.join(IMG_DIR, fname)
         with open(filepath, "rb") as f:
             msg = await app.bot.send_photo(
-                chat_id=CHAT_ID,
+                chat_id=ADMIN_ID,
                 photo=InputFile(f)
             )
             key = sanitize_filename(os.path.splitext(fname)[0])
-
             file_id = msg.photo[-1].file_id
             result[key] = file_id
             print(f"{key} => {file_id}")
@@ -39,6 +43,8 @@ import asyncio
 
 if __name__ == "__main__":
     async def main():
+        if not BOT_TOKEN or not ADMIN_ID:
+            raise ValueError("❌ BOT_TOKEN dan ADMIN_ID harus diatur di file .env")
         app = Application.builder().token(BOT_TOKEN).build()
         await upload_all(app)
 

@@ -3,7 +3,8 @@ import json
 from telegram import InputFile
 from telegram.ext import Application
 import asyncio
-
+from dotenv import load_dotenv
+load_dotenv()
 # Ambil dari environment
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("ADMIN_ID")  # bisa berupa string ID atau -100...
